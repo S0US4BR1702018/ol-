@@ -33,41 +33,47 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
         }
+
+        .touch-hint {
+            margin-top: 40px;
+            font-size: 20px;
+            color: yellow;
+            animation: piscar2 1s infinite;
+        }
+
+        @keyframes piscar2 {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <h1>VAI TRABALHAR VAGABUNDO</h1>
     <img src="sua-foto.jpg" alt="Minha Foto">
+    <div class="touch-hint">😎</div>
 
-    <!-- Som principal -->
-    <audio id="som" preload="auto">
+    <audio id="som" loop>
         <source src="som.mp3" type="audio/mpeg">
         Seu navegador não suporta áudio.
     </audio>
 
     <script>
-        // Função que cria e toca um som silencioso
-        function tocarSilencio() {
-            const contexto = new (window.AudioContext || window.webkitAudioContext)();
-            const buffer = contexto.createBuffer(1, 1, 22050);
-            const fonte = contexto.createBufferSource();
-            fonte.buffer = buffer;
-            fonte.connect(contexto.destination);
-            fonte.start(0);
+        const som = document.getElementById('som');
+
+        function tocarSom() {
+            som.play().then(() => {
+                console.log("🎵 Som iniciado após toque na tela!");
+            }).catch(err => {
+                console.error("Não foi possível tocar o som:", err);
+            });
+            // Remove o listener depois que o som começar
+            window.removeEventListener('touchstart', tocarSom);
         }
 
-        // Ao carregar a página, toca o som silencioso e depois o real
-        window.addEventListener('load', function() {
-            try {
-                tocarSilencio();
-                const som = document.getElementById('som');
-                som.play().catch(() => {
-                    console.log("Autoplay bloqueado — o usuário precisa clicar em algum lugar primeiro.");
-                });
-            } catch (e) {
-                console.error("Erro ao tentar reproduzir o som:", e);
-            }
-        });
+        // Escuta qualquer toque na tela
+        window.addEventListener('touchstart', tocarSom);
+        // Também funciona se o usuário clicar no desktop
+        window.addEventListener('click', tocarSom);
     </script>
 </body>
 </html>
