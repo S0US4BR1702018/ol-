@@ -1,79 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Minha Foto</title>
-    <style>
-        body {
-            text-align: center;
-            background-color: #111;
-            font-family: Arial, sans-serif;
-            color: white;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vai Trabalhar!</title>
+<style>
+    body {
+        margin: 0;
+        text-align: center;
+        background-color: #111;
+        font-family: Arial, sans-serif;
+        color: white;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
-        h1 {
-            font-size: 48px;
-            font-weight: bold;
-            background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
-            -webkit-background-clip: text;
-            color: transparent;
-            animation: piscar 1s infinite;
-            margin-top: 60px;
-        }
+    h1 {
+        font-size: 8vw; /* tamanho relativo à tela */
+        font-weight: bold;
+        background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, violet);
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: piscar 1s infinite;
+        margin: 20px;
+        text-align: center;
+    }
 
-        @keyframes piscar {
-            0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0; }
-        }
+    @keyframes piscar {
+        0%, 50%, 100% { opacity: 1; }
+        25%, 75% { opacity: 0; }
+    }
 
-        img {
-            margin-top: 30px;
-            width: 500px;
-            border: 5px solid white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
-        }
+    img {
+        width: 80vw; /* responsivo para mobile */
+        max-width: 500px;
+        border: 5px solid white;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(255,255,255,0.6);
+        margin: 20px 0;
+    }
 
-        .touch-hint {
-            margin-top: 40px;
-            font-size: 20px;
-            color: yellow;
-            animation: piscar2 1s infinite;
-        }
+    .touch-hint {
+        font-size: 5vw;
+        color: yellow;
+        animation: piscar2 1s infinite;
+        text-align: center;
+        padding: 10px;
+    }
 
-        @keyframes piscar2 {
-            0%, 50%, 100% { opacity: 1; }
-            25%, 75% { opacity: 0; }
-        }
-    </style>
+    @keyframes piscar2 {
+        0%, 50%, 100% { opacity: 1; }
+        25%, 75% { opacity: 0; }
+    }
+</style>
 </head>
 <body>
-    <h1>VAI TRABALHAR VAGABUNDO</h1>
-    <img src="sua-foto.jpg" alt="Minha Foto">
-    <div class="touch-hint">😎</div>
+<h1>VAI TRABALHAR VAGABUNDO</h1>
+<img src="sua-foto.jpg" alt="Minha Foto">
+<div class="touch-hint">Toque em qualquer lugar da tela para ouvir o som!</div>
 
-    <audio id="som" loop>
-        <source src="som.mp3" type="audio/mpeg">
-        Seu navegador não suporta áudio.
-    </audio>
+<audio id="som" loop>
+    <source src="som.mp3" type="audio/mpeg">
+    Seu navegador não suporta áudio.
+</audio>
 
-    <script>
-        const som = document.getElementById('som');
+<script>
+    const som = document.getElementById('som');
+    const hint = document.querySelector('.touch-hint');
 
-        function tocarSom() {
-            som.play().then(() => {
-                console.log("🎵 Som iniciado após toque na tela!");
-            }).catch(err => {
-                console.error("Não foi possível tocar o som:", err);
-            });
-            // Remove o listener depois que o som começar
-            window.removeEventListener('touchstart', tocarSom);
-        }
+    function tocarSom() {
+        som.play().then(() => {
+            console.log("🎵 Som iniciado após toque!");
+            hint.style.display = 'none'; // esconde a mensagem
+        }).catch(err => {
+            console.error("Não foi possível tocar o som:", err);
+        });
+        // Remove o listener para não disparar de novo
+        window.removeEventListener('touchstart', tocarSom);
+        window.removeEventListener('click', tocarSom);
+    }
 
-        // Escuta qualquer toque na tela
-        window.addEventListener('touchstart', tocarSom);
-        // Também funciona se o usuário clicar no desktop
-        window.addEventListener('click', tocarSom);
-    </script>
+    // Escuta toque na tela (mobile) e clique (desktop)
+    window.addEventListener('touchstart', tocarSom);
+    window.addEventListener('click', tocarSom);
+</script>
 </body>
 </html>
